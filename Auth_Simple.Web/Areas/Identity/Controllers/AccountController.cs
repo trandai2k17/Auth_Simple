@@ -1,42 +1,41 @@
-﻿using Auth_Simple.Web.Models;
+﻿using Application.Interfaces;
+using Auth_Simple.Web.Data;
+using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
+using Microsoft.EntityFrameworkCore;
+using Persistence.DapperContext;
+using Persistence.Repositories;
 
 namespace Auth_Simple.Web.Areas.Identity.Controllers
 {
     [Area("Identity")]
     public class AccountController : Controller
     {
-        public IActionResult Register(string ReturnUrl = null)
+        private readonly IUnitOfWork _unitOfWork;
+        public AccountController(IUnitOfWork unitOfWork)
         {
-            var model = new Account()
-            {
-                ReturnUrl = ReturnUrl,
-            };
+            _unitOfWork = unitOfWork;
+        }
+        public IActionResult Register()
+        {
+            AccountTable model = new AccountTable();
             return View(nameof(Register), model);
         }
 
-        public IActionResult Accounts()
+        public async Task<IActionResult> Accounts()
         {
-            return View(nameof(Accounts));
+            List<SYSUserTable> users = new List<SYSUserTable>();
+
+            return View(nameof(Accounts), users);
         }
 
         [HttpPost]
-        public IActionResult Register(Account model)
+        public async Task<IActionResult> RegisterIdentity(SYSUserTable model)
         {
-            if (ModelState.IsValid)
-            {
-                ApplicationUser user = new ApplicationUser()
-                {
-                    EmployeeID = model.EmployeeID,
-                    Email = model.Email,
-                    NormalizedEmail = model.Email.ToUpper(),
-                    EmailConfirmed = true,
-                    UserName = model.EmployeeID,
-                };
-            }
+            List<SYSUserTable> users = new List<SYSUserTable>();
+            //users = await _db.SYSUserTableDB.ToListAsync();
 
-            return View(nameof(Register), model);
+            return View(nameof(Accounts), users);
         }
     }
 }

@@ -1,0 +1,64 @@
+﻿@model List<Employee>;
+
+@{
+    ViewData["Title"] = "Account List";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="table table-bordered table-sm table-striped">
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>Employee ID</th>
+            <th>Name</th>
+            <th>HireDate</th>
+            <th>BirthDate</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Gender</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model == null)
+        {
+            <tr><td colspan="7" class="text-center">No Model Data</td></tr>
+        }
+        else
+        {
+            int rowNo = 0;
+            <form asp-area="Identity" asp-action="RegisterIdentity" asp-controller="Account" method="post">
+                @foreach (var p in Model)
+                {
+                <tr>
+                    <td>@(rowNo += 1)</td>
+                    <td>@p.EmployeeID</td>
+                    <td>@p.EmployeeName</td>
+                    <td>@p.HireDate</td>
+                    <td>@p.BirthDate</td>
+                    <td>@p.EmailAddress</td>
+                    <td>
+                            @if (@p.Gender == "M")
+                            {
+                                <p class="text-success">Male</p>
+                            }
+                            else if (@p.Gender == "F")
+                            {
+                            <p class="fw-bold text-success">Female</p>
+                            }
+                            else
+                            {
+                                <p class="fw-bold text-secondary">Other</p>
+                            }
+                    </td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-secondary" value="Reg User" />
+                    </td>
+                </tr>
+                }
+            </form>
+
+        }
+    </tbody>
+</table>

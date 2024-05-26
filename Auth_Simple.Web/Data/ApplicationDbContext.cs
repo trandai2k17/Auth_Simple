@@ -1,4 +1,5 @@
 ﻿using Auth_Simple.Web.Models;
+using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +12,8 @@ namespace Auth_Simple.Web.Data
             : base(options)
         {
         }
-
+        public DbSet<SYSUserTable> SYSUserTableDB { get; set; }
+        public DbSet<FTPAccount> FTPAccountDB { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
