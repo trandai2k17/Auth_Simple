@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Auth_Simple.Infrastructure.Identity.Models;
 using Auth_Simple.Web.Data;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -18,8 +19,13 @@ namespace Auth_Simple.Web.Areas.Identity.Controllers
         }
         public IActionResult Register()
         {
-            AccountTable model = new AccountTable();
+            Account model = new Account();
             return View(nameof(Register), model);
+        }
+        public IActionResult Login()
+        {
+            Account model = new Account();
+            return View(nameof(Login), model);
         }
 
         public async Task<IActionResult> Accounts()

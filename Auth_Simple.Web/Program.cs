@@ -1,3 +1,4 @@
+using Auth_Simple.Infrastructure.Identity;
 using Auth_Simple.Web.Data;
 using Auth_Simple.Web.Models;
 using Microsoft.AspNetCore.Identity;
@@ -12,9 +13,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 //Connection String
 var connectionString = builder.Configuration.GetConnectionString("AppConn") ?? throw new InvalidOperationException("Connection string 'AppConn' not found.");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+//builder.Services.AddDbContext<ApplicationDbContext>(options =>
+//    options.UseSqlServer(connectionString));
+//builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 //Identity
 //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -22,9 +23,11 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 //builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 //builder.Services.AddScoped<DapperDBContext>();
 builder.Services.AddInfrastructure();
+builder.Services.AddIdentityDbContext(builder.Configuration);
+builder.Services.AddIdentityAuth();
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+//builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+//    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.Configure<IdentityOptions>(options =>
 {

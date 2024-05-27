@@ -1,4 +1,5 @@
-﻿using Auth_Simple.Web.Models;
+﻿using Auth_Simple.Infrastructure.Identity.Models;
+using Auth_Simple.Web.Models;
 using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

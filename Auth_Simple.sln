@@ -7,15 +7,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Auth_Simple.Web", "Auth_Sim
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{382FD4DD-D981-44CF-BDB5-04DDFC579CCF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{05D41404-0AFC-4DE2-8B13-29E3D13B2C73}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{05D41404-0AFC-4DE2-8B13-29E3D13B2C73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{A642AB24-81A5-4792-A1AD-8161F1A261F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{A642AB24-81A5-4792-A1AD-8161F1A261F9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{52DC0114-04BB-47EA-B25D-F0BBCF4090F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence", "Persistence\Persistence.csproj", "{1EA06F72-22F0-4A8B-8649-EC3E49C0677F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence", "Persistence\Persistence.csproj", "{1EA06F72-22F0-4A8B-8649-EC3E49C0677F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{641513B7-C65F-472B-A92D-616EFC407CFA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{641513B7-C65F-472B-A92D-616EFC407CFA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auth_Simple.Infrastructure.Identity", "Auth_Simple.Infrastructure.Identity\Auth_Simple.Infrastructure.Identity.csproj", "{CC1D09E3-8D05-4DAF-B716-5BBE1E76D7BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +45,10 @@ Global
 		{641513B7-C65F-472B-A92D-616EFC407CFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{641513B7-C65F-472B-A92D-616EFC407CFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{641513B7-C65F-472B-A92D-616EFC407CFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC1D09E3-8D05-4DAF-B716-5BBE1E76D7BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC1D09E3-8D05-4DAF-B716-5BBE1E76D7BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC1D09E3-8D05-4DAF-B716-5BBE1E76D7BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC1D09E3-8D05-4DAF-B716-5BBE1E76D7BD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
