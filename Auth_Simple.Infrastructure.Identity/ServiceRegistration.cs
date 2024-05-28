@@ -1,5 +1,7 @@
-﻿using Auth_Simple.Infrastructure.Identity.DBContext;
+﻿using Application.Interfaces;
+using Auth_Simple.Infrastructure.Identity.DBContext;
 using Auth_Simple.Infrastructure.Identity.Models;
+using Auth_Simple.Infrastructure.Identity.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -21,9 +23,24 @@ namespace Auth_Simple.Infrastructure.Identity
 
         public static void AddIdentityAuth(this IServiceCollection services)
         {
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                options.Password.RequiredLength = 6;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireDigit = false;
+            })
                     .AddEntityFrameworkStores<AppIdentityDbContext>()
                     .AddDefaultTokenProviders();
+        }
+
+        public static void AddInfrastructureIdentity(this IServiceCollection services)
+        {
+            //services.AddScoped<DapperDBContext>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IUserService, UserService>();
+
         }
 
     }

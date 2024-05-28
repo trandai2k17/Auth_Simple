@@ -16,18 +16,31 @@ var connectionString = builder.Configuration.GetConnectionString("AppConn") ?? t
 //builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //    options.UseSqlServer(connectionString));
 //builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
 //Identity
 //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
 //    .AddEntityFrameworkStores<ApplicationDbContext>();
 //builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 //builder.Services.AddScoped<DapperDBContext>();
+//builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+//    .AddEntityFrameworkStores<ApplicationDbContext>();
+
+
 builder.Services.AddInfrastructure();
+builder.Services.AddInfrastructureIdentity();
 builder.Services.AddIdentityDbContext(builder.Configuration);
 builder.Services.AddIdentityAuth();
 
-//builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-//    .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    // Cookie settings
+    options.Cookie.HttpOnly = true;
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+
+    options.LoginPath = "/Identity/Account/Login";
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+    options.SlidingExpiration = true;
+
+});
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
@@ -72,9 +85,9 @@ app.MapAreaControllerRoute(
         pattern: "Identity/{controller=Account}/{action=Login}"
     );
 
-app.MapControllerRoute(
-            name: "areaRoute",
-            pattern: "{area:exists}/{controller}/{action}");
+//app.MapControllerRoute(
+//            name: "areaRoute",
+//            pattern: "{area:exists}/{controller}/{action}");
 
 app.MapControllerRoute(
     name: "default",

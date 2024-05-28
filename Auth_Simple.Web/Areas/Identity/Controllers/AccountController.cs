@@ -2,6 +2,8 @@
 using Auth_Simple.Infrastructure.Identity.Models;
 using Auth_Simple.Web.Data;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Persistence.DapperContext;
@@ -13,25 +15,58 @@ namespace Auth_Simple.Web.Areas.Identity.Controllers
     public class AccountController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        public AccountController(IUnitOfWork unitOfWork)
+        private readonly IAuthService _authService;
+        
+        public AccountController(IUnitOfWork unitOfWork, IAuthService authService)
         {
             _unitOfWork = unitOfWork;
+            _authService = authService;
         }
         public IActionResult Register()
         {
             Account model = new Account();
             return View(nameof(Register), model);
         }
-        public IActionResult Login()
+        [HttpPost]
+        public async Task<IActionResult> Register(Account account, string ReturnUrl = null)
         {
+            if(ModelState.IsValid)
+            {
+                var result = await _authService.RegisterAsync(account);
+                if(result)
+                {
+                    await _authService.SignInAsync(account);
+
+                    return RedirectToAction(ReturnUrl);
+                }
+               
+            }
             Account model = new Account();
+            return View(nameof(Register), account);
+        }
+        public IActionResult Login(string ReturnUrl = null)
+        {
+            Account model = new Account()
+            {
+                ReturnUrl = ReturnUrl
+            };
             return View(nameof(Login), model);
         }
-
+        [HttpPost]
+        public async Task<IActionResult> Login(Account account, string ReturnUrl = null)
+        {
+            var result = await _authService.SignInAsync(account);
+            if(result)
+            {
+                return Redirect(ReturnUrl);
+            }
+            return View(nameof(Login), account);
+        }
+        [Authorize]
         public async Task<IActionResult> Accounts()
         {
             List<SYSUserTable> users = new List<SYSUserTable>();
-
+            users = await _unitOfWork.AccountRepo.AccountsAsync();
             return View(nameof(Accounts), users);
         }
 
@@ -42,6 +77,13 @@ namespace Auth_Simple.Web.Areas.Identity.Controllers
             //users = await _db.SYSUserTableDB.ToListAsync();
 
             return View(nameof(Accounts), users);
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await _authService.SignOutAsync();
+
+            return Redirect("/Home");
         }
     }
 }
