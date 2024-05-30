@@ -17,6 +17,7 @@
             <th>Email</th>
             <th>Phone</th>
             <th>Gender</th>
+            <th>Has Account</th>
             <th></th>
         </tr>
     </thead>
@@ -28,9 +29,9 @@
         else
         {
             int rowNo = 0;
-            <form asp-area="Identity" asp-action="RegisterIdentity" asp-controller="Account" method="post">
-                @foreach (var p in Model)
-                {
+
+            @foreach (var p in Model)
+            {
                 <tr>
                     <td>@(rowNo += 1)</td>
                     <td>@p.EmployeeID</td>
@@ -38,26 +39,28 @@
                     <td>@p.HireDate</td>
                     <td>@p.BirthDate</td>
                     <td>@p.EmailAddress</td>
+                    <td>@p.Phone</td>
                     <td>
-                            @if (@p.Gender == "M")
-                            {
-                                <p class="text-success">Male</p>
-                            }
-                            else if (@p.Gender == "F")
-                            {
+                        @if (@p.Gender == "M")
+                        {
+                            <p class="text-success">Male</p>
+                        }
+                        else if (@p.Gender == "F")
+                        {
                             <p class="fw-bold text-success">Female</p>
-                            }
-                            else
-                            {
-                                <p class="fw-bold text-secondary">Other</p>
-                            }
+                        }
+                        else
+                        {
+                            <p class="fw-bold text-secondary">Other</p>
+                        }
                     </td>
+                    <td>@p.HasAccount</td>
                     <td>
-                        <a class="btn btn-sm btn-outline-secondary" value="Reg User" />
+                        <a asp-action="CreateAccount" asp-controller="Employee" asp-route-employeeID="@p.EmployeeID" class="btn btn-sm btn-outline-secondary">Account</a>
                     </td>
                 </tr>
-                }
-            </form>
+            }
+
 
         }
     </tbody>

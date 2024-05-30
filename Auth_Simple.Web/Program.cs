@@ -1,5 +1,4 @@
 using Auth_Simple.Infrastructure.Identity;
-using Auth_Simple.Web.Data;
 using Auth_Simple.Web.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -13,17 +12,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 //Connection String
 var connectionString = builder.Configuration.GetConnectionString("AppConn") ?? throw new InvalidOperationException("Connection string 'AppConn' not found.");
-//builder.Services.AddDbContext<ApplicationDbContext>(options =>
-//    options.UseSqlServer(connectionString));
-//builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-//Identity
-//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-//    .AddEntityFrameworkStores<ApplicationDbContext>();
-//builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
-//builder.Services.AddScoped<DapperDBContext>();
-//builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-//    .AddEntityFrameworkStores<ApplicationDbContext>();
-
 
 builder.Services.AddInfrastructure();
 builder.Services.AddInfrastructureIdentity();
@@ -52,12 +40,18 @@ builder.Services.Configure<IdentityOptions>(options =>
 //builder.Services.AddControllersWithViews();
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
+
+builder.Services.Configure<IISOptions>(options =>
+{
+    options.ForwardClientCertificate = false;
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
+    app.UseDeveloperExceptionPage();
 }
 else
 {
@@ -78,6 +72,8 @@ app.UseStaticFiles(new StaticFileOptions
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseAuthentication();
+
 
 app.MapAreaControllerRoute(
         name: "Identity",

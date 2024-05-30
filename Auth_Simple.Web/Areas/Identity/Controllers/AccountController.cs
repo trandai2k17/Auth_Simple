@@ -1,9 +1,9 @@
 ﻿using Application.Interfaces;
 using Auth_Simple.Infrastructure.Identity.Models;
-using Auth_Simple.Web.Data;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Persistence.DapperContext;
@@ -48,7 +48,7 @@ namespace Auth_Simple.Web.Areas.Identity.Controllers
         {
             Account model = new Account()
             {
-                ReturnUrl = ReturnUrl
+                ReturnUrl = ReturnUrl?? "/"
             };
             return View(nameof(Login), model);
         }
@@ -58,6 +58,9 @@ namespace Auth_Simple.Web.Areas.Identity.Controllers
             var result = await _authService.SignInAsync(account);
             if(result)
             {
+                var user = await _authService.FindByNameAsync(account);
+
+                ViewBag.CurrentUser = user;
                 return Redirect(ReturnUrl);
             }
             return View(nameof(Login), account);
@@ -84,6 +87,13 @@ namespace Auth_Simple.Web.Areas.Identity.Controllers
             await _authService.SignOutAsync();
 
             return Redirect("/Home");
+        }
+
+
+        public async Task<IActionResult> CreateAccount(Employee EmplID)
+        {
+            Account account = new Account();
+            return View(nameof(Register), account);
         }
     }
 }

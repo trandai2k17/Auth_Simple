@@ -12,6 +12,7 @@ namespace Domain.Entities
     {
         public string ReturnUrl { get; set; }
         public string UserName { get; set; }
+        public string? EmployeeName { get; set; }
         [Required]
         public string EmployeeID { get; set; }
         public string Email { get; set; }

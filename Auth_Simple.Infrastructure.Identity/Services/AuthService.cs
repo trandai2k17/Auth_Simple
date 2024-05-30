@@ -45,6 +45,7 @@ namespace Auth_Simple.Infrastructure.Identity.Services
                 Email = account.Email,
                 UserName = account.EmployeeID,
                 EmployeeID = account.EmployeeID,
+                EmplName = account.EmployeeName,
             };
 
             IdentityResult result = await _userManager.CreateAsync(user, account.Password);
@@ -55,6 +56,23 @@ namespace Auth_Simple.Infrastructure.Identity.Services
             }
 
             return false;
+        }
+
+        public async Task<Employee> FindByNameAsync(Account account)
+        {
+            ApplicationUser user = new ApplicationUser
+            {
+                Email = account.Email,
+                UserName = account.EmployeeID,
+                EmployeeID = account.EmployeeID,
+            };
+            user = await _userManager.FindByNameAsync(user.UserName);
+
+            Employee employee = new Employee() {
+                EmployeeID = user.EmployeeID,
+                EmployeeName = user.EmplName,   
+            };
+            return employee;
         }
     }
 }

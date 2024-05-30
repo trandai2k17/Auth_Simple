@@ -18,8 +18,15 @@ namespace Persistence.Repositories
         }
         public async Task<List<Employee>> EmployeesAsync()
         {
-            string query = @"SELECT * FROM [MyDB1021].[dbo].[HR_Employee]";
-            return await _dapper.ExecuteQueryListAsync<Employee>(query, null, CommandType.Text);
+            string query = @"SELECT H.*, HasAccount = CASE WHEN U.Id <> '' Then 'Registed' ELSE '' END FROM [MyDB1021].[dbo].[HR_Employee] H";
+            query += " OUTER APPLY (SELECT * FROM MyDB1021.dbo.Web_User WHERE H.EmployeeID=EmployeeID) U";
+                return await _dapper.ExecuteQueryListAsync<Employee>(query, null, CommandType.Text);
+        }
+
+        public async Task<Employee> GetEmployeeByEmplID(string EmplId)
+        {
+            string query = @"SELECT * FROM [MyDB1021].[dbo].[HR_Employee] WHERE EmployeeID='" + EmplId + "'";
+            return await _dapper.ExecuteQueryFirstAsync<Employee>(query, null, CommandType.Text);
         }
     }
 }

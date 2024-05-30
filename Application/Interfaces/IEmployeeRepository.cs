@@ -10,5 +10,6 @@ namespace Application.Interfaces
     public interface IEmployeeRepository
     {
         Task<List<Employee>> EmployeesAsync();
+        Task<Employee> GetEmployeeByEmplID(string EmplId);
     }
 }
