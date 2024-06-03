@@ -22,10 +22,9 @@ namespace Persistence.Repositories
 
         public async Task<List<SYSUserTable>> AccountsAsync()
         {
-
-            string query = @"SELECT * FROM [MyDB1021].[dbo].[HR_Employee]";
+            string query = @"SELECT U.EmployeeID, U.EmplName, U.UserName, U.NormalizedUserName, U.NormalizedEmail, U.Email FROM MyDB1021.dbo.Web_User U
+OUTER APPLY (SELECT * FROM MyDB1021.dbo.HR_Employee WHERE U.EmployeeID=EmployeeID ) H ";
             return await dapper.ExecuteQueryListAsync<SYSUserTable>(query, null, CommandType.Text);
-
         }
 
     }

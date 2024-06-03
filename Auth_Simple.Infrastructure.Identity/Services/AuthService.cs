@@ -3,6 +3,7 @@ using Auth_Simple.Infrastructure.Identity.Models;
 using Azure.Core;
 using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +16,13 @@ namespace Auth_Simple.Infrastructure.Identity.Services
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AuthService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public AuthService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager)
         {
             _signInManager = signInManager;
             _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         public async Task<bool> SignInAsync(Account account)
@@ -73,6 +76,30 @@ namespace Auth_Simple.Infrastructure.Identity.Services
                 EmployeeName = user.EmplName,   
             };
             return employee;
+        }
+
+        public async Task AddRoleAsync(string roleName)
+        {
+              await _roleManager.CreateAsync(new IdentityRole(roleName.Trim()));
+        }
+
+        public async Task<List<IdentityRole>> Roles()
+        {
+            return await _roleManager.Roles.ToListAsync();
+        }
+        public async Task<bool> UpdateRoleAsync(string id)
+        {
+            var role = await _roleManager.FindByIdAsync(id.Trim());
+            if (role == null) { return false; }
+            var result = await _roleManager.UpdateAsync(role);
+            return result.Succeeded;
+        }
+        public async Task<bool> DeleteRoleAsync(string id)
+        {
+            var role = await _roleManager.FindByIdAsync(id.Trim());
+            if (role == null) { return false; }
+            var result = await _roleManager.DeleteAsync(role);
+            return result.Succeeded;
         }
     }
 }

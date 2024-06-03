@@ -28,7 +28,7 @@ namespace Auth_Simple.Web.Areas.Identity.Controllers
             return View(nameof(Register), model);
         }
         [HttpPost]
-        public async Task<IActionResult> Register(Account account, string ReturnUrl = null)
+        public async Task<IActionResult> Register(Account account)
         {
             if(ModelState.IsValid)
             {
@@ -36,8 +36,7 @@ namespace Auth_Simple.Web.Areas.Identity.Controllers
                 if(result)
                 {
                     await _authService.SignInAsync(account);
-
-                    return RedirectToAction(ReturnUrl);
+                    return Redirect(account.ReturnUrl);
                 }
                
             }
@@ -48,22 +47,19 @@ namespace Auth_Simple.Web.Areas.Identity.Controllers
         {
             Account model = new Account()
             {
-                ReturnUrl = ReturnUrl?? "/"
+                ReturnUrl = ReturnUrl?? "~"
             };
             return View(nameof(Login), model);
         }
         [HttpPost]
-        public async Task<IActionResult> Login(Account account, string ReturnUrl = null)
+        public async Task<IActionResult> Login(Account model, string ReturnUrl)
         {
-            var result = await _authService.SignInAsync(account);
+            var result = await _authService.SignInAsync(model);
             if(result)
             {
-                var user = await _authService.FindByNameAsync(account);
-
-                ViewBag.CurrentUser = user;
-                return Redirect(ReturnUrl);
+                return Redirect("~" + ReturnUrl);
             }
-            return View(nameof(Login), account);
+            return View(nameof(Login), model);
         }
         [Authorize]
         public async Task<IActionResult> Accounts()
@@ -72,7 +68,6 @@ namespace Auth_Simple.Web.Areas.Identity.Controllers
             users = await _unitOfWork.AccountRepo.AccountsAsync();
             return View(nameof(Accounts), users);
         }
-
         [HttpPost]
         public async Task<IActionResult> RegisterIdentity(SYSUserTable model)
         {
@@ -86,7 +81,7 @@ namespace Auth_Simple.Web.Areas.Identity.Controllers
         {
             await _authService.SignOutAsync();
 
-            return Redirect("/Home");
+            return Redirect("~/Home");
         }
 
 

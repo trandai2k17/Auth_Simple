@@ -1,5 +1,6 @@
 using Auth_Simple.Infrastructure.Identity;
 using Auth_Simple.Web.Models;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
@@ -70,24 +71,26 @@ app.UseStaticFiles(new StaticFileOptions
 });
 
 app.UseRouting();
-
 app.UseAuthorization();
-app.UseAuthentication();
+//app.UseAuthentication();
 
 
-app.MapAreaControllerRoute(
-        name: "Identity",
-        areaName: "Identity",
-        pattern: "Identity/{controller=Account}/{action=Login}"
-    );
 
-//app.MapControllerRoute(
-//            name: "areaRoute",
-//            pattern: "{area:exists}/{controller}/{action}");
+//app.MapRazorPages();
+
+
+
+//app.MapAreaControllerRoute(
+//        name: "Identity",
+//        areaName: "Identity",
+//        pattern: "Identity/{controller=Account}/{action=Login}"
+//    );
+
+app.MapControllerRoute(
+            name: "areas",
+            pattern: "{area:exists}/{controller}/{action}");
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-//app.MapRazorPages();
-
 app.Run();

@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using Auth_Simple.Infrastructure.Identity.Services;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Auth_Simple.Web.Controllers
@@ -14,6 +15,7 @@ namespace Auth_Simple.Web.Controllers
             _unitOfWork = unitOfWork;
             _authService = authService;
         }
+        [Authorize]
         public async Task<IActionResult> Employees()
         {
             List<Employee> employees = new List<Employee>();
