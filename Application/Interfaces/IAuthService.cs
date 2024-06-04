@@ -10,7 +10,7 @@ namespace Application.Interfaces
 {
     public interface IAuthService
     {
-        Task AddRoleAsync(string roleName);
+        Task<bool> AddRoleAsync(string roleName);
         Task<Employee> FindByNameAsync(Account account);
         Task<bool> RegisterAsync(Account account);
         Task<List<IdentityRole>> Roles();
@@ -18,5 +18,6 @@ namespace Application.Interfaces
         Task SignOutAsync();
         Task<bool> DeleteRoleAsync(string id);
         Task<bool> UpdateRoleAsync(string id);
+        Task<IdentityRole> GetRoleByName(string roleName);
     }
 }

@@ -16,22 +16,46 @@ namespace Auth_Simple.Web.Areas.Identity.Controllers
         public async Task<IActionResult> Roles()
         {
             var roles = await _authService.Roles();
-            var model = new RoleVM() { 
+            var model = new RoleVM()
+            {
                 Roles = roles,
                 CreatedDate = DateTime.Now,
 
             };
             return View(nameof(Roles), model);
         }
-        [HttpPost]
-        public async Task<IActionResult> Create(RoleVM model)
+        public async Task<IActionResult> Create(string RoleName)
         {
-            if (ModelState.IsValid)
+            var existsRole = await _authService.GetRoleByName(RoleName);
+            if (existsRole != null)
             {
-                await _authService.AddRoleAsync(model.RoleName);
-                return RedirectToAction(nameof(Roles));
+                TempData["warning"] = "Exists";
+            } else
+            {
+                var result = await _authService.AddRoleAsync(RoleName);
+                if (result)
+                {
+                    TempData["success"] = "Success";
+                }
+                else
+                {
+                    TempData["error"] = "Faild";
+                }
             }
-            return View(nameof(Create), model);
+            
+            return RedirectToAction(nameof(Roles));
+        }
+        [HttpGet]
+        public async Task<IActionResult> Update(string RoleName)
+        {
+            var role = await _authService.GetRoleByName(RoleName);
+            var model = new RoleVM()
+            {
+                RoleID = role.Id,
+                RoleName = role.Name,
+                Roles = await _authService.Roles()
+            };
+            return View(nameof(Roles), model);
         }
 
         [HttpPost]
@@ -40,16 +64,16 @@ namespace Auth_Simple.Web.Areas.Identity.Controllers
             if (ModelState.IsValid)
             {
                 await _authService.UpdateRoleAsync(model.RoleID);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Roles));
             }
-            return View(nameof(Update), model);
+            return View(nameof(Roles), model);
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(RoleVM model)
         {
             await _authService.DeleteRoleAsync(model.RoleID);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Roles));
         }
     }
 }

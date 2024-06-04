@@ -78,14 +78,19 @@ namespace Auth_Simple.Infrastructure.Identity.Services
             return employee;
         }
 
-        public async Task AddRoleAsync(string roleName)
+        public async Task<bool> AddRoleAsync(string roleName)
         {
-              await _roleManager.CreateAsync(new IdentityRole(roleName.Trim()));
+            var result = await _roleManager.CreateAsync(new IdentityRole(roleName.Trim()));
+                return result.Succeeded;
         }
 
         public async Task<List<IdentityRole>> Roles()
         {
             return await _roleManager.Roles.ToListAsync();
+        }
+        public async Task<IdentityRole> GetRoleByName(string roleName)
+        {
+            return await _roleManager.FindByNameAsync(roleName);
         }
         public async Task<bool> UpdateRoleAsync(string id)
         {
