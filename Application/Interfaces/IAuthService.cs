@@ -17,7 +17,8 @@ namespace Application.Interfaces
         Task<bool> SignInAsync(Account account);
         Task SignOutAsync();
         Task<bool> DeleteRoleAsync(string id);
-        Task<bool> UpdateRoleAsync(string id);
+        Task<bool> UpdateRoleAsync(IdentityRole role);
         Task<IdentityRole> GetRoleByName(string roleName);
+        Task<IdentityRole> GetRoleByID(string RoleID);
     }
 }

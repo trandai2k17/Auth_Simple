@@ -20,26 +20,43 @@ namespace Auth_Simple.Web.Areas.Identity.Controllers
             {
                 Roles = roles,
                 CreatedDate = DateTime.Now,
-
             };
             return View(nameof(Roles), model);
         }
-        public async Task<IActionResult> Create(string RoleName)
+        [HttpPost]
+        public async Task<IActionResult> Create(RoleVM role)
         {
-            var existsRole = await _authService.GetRoleByName(RoleName);
-            if (existsRole != null)
+            if(!string.IsNullOrEmpty(role.RoleID))
             {
-                TempData["warning"] = "Exists";
-            } else
-            {
-                var result = await _authService.AddRoleAsync(RoleName);
-                if (result)
+                var updateRole = await _authService.GetRoleByID(role.RoleID);
+
+                updateRole.Name = role.RoleName;
+                if (await _authService.UpdateRoleAsync(updateRole))
                 {
                     TempData["success"] = "Success";
+                } else
+                {
+                    TempData["error"] = "failed";
+                }
+                return RedirectToAction(nameof(Roles));
+            } else
+            {
+                var existsRole = await _authService.GetRoleByName(role.RoleName);
+                if (existsRole != null)
+                {
+                    TempData["warning"] = "Exists";
                 }
                 else
                 {
-                    TempData["error"] = "Faild";
+                    var result = await _authService.AddRoleAsync(role.RoleName);
+                    if (result)
+                    {
+                        TempData["success"] = "Success";
+                    }
+                    else
+                    {
+                        TempData["error"] = "failed";
+                    }
                 }
             }
             
@@ -61,11 +78,11 @@ namespace Auth_Simple.Web.Areas.Identity.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(RoleVM model)
         {
-            if (ModelState.IsValid)
-            {
-                await _authService.UpdateRoleAsync(model.RoleID);
-                return RedirectToAction(nameof(Roles));
-            }
+            //if (ModelState.IsValid)
+            //{
+            //    await _authService.UpdateRoleAsync(model.RoleID);
+            //    return RedirectToAction(nameof(Roles));
+            //}
             return View(nameof(Roles), model);
         }
 

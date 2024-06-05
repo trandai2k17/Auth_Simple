@@ -92,10 +92,12 @@ namespace Auth_Simple.Infrastructure.Identity.Services
         {
             return await _roleManager.FindByNameAsync(roleName);
         }
-        public async Task<bool> UpdateRoleAsync(string id)
+        public async Task<IdentityRole> GetRoleByID(string RoleID)
         {
-            var role = await _roleManager.FindByIdAsync(id.Trim());
-            if (role == null) { return false; }
+            return await _roleManager.FindByIdAsync(RoleID);
+        }
+        public async Task<bool> UpdateRoleAsync(IdentityRole role)
+        {
             var result = await _roleManager.UpdateAsync(role);
             return result.Succeeded;
         }
